@@ -1,0 +1,31 @@
+{
+  "name": "web-components-ui",
+  "version": "1.0.0",
+  "description": "Web Components UI library",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunpietro/web-components-ui.git"
+  },
+  "keywords": [
+    "web",
+    "components",
+    "ui",
+    "library"
+  ],
+  "author": "Piotr Nalepa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sunpietro/web-components-ui/issues"
+  },
+  "homepage": "https://github.com/sunpietro/web-components-ui#readme",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.2.10"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
+}
