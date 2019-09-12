@@ -94,6 +94,7 @@ class Notification extends HTMLElement {
         this.attachShadow({ mode: 'open' });
 
         this.shadowRoot.appendChild(template.content.cloneNode(true));
+        this._onClose.bind(this);
     }
 
     get type() {
@@ -101,7 +102,16 @@ class Notification extends HTMLElement {
     }
 
     set type(newValue) {
+        console.log({ newValue });
         this.setAttribute('type', newValue);
+    }
+
+    get hidden() {
+        return this.getAttribute('hidden');
+    }
+
+    set hidden(newValue) {
+        this.setAttribute('hidden', !!newVal);
     }
 
     static get observedAttributes() {
@@ -109,7 +119,7 @@ class Notification extends HTMLElement {
     }
 
     connectedCallback() {
-        this.btnClose = this.shadowRoot.querySelector('#close');
+        this.btnClose = this.shadowRoot.querySelector('#btn');
         this.container = this.shadowRoot.querySelector('#container');
 
         this.btnClose.addEventListener('click', this._onClose, false);
@@ -126,12 +136,18 @@ class Notification extends HTMLElement {
     }
 
     attributesChangedCallback(name, oldVal, newVal) {
-        console.log({ oldVal, newVal, name });
+        console.log('attributesChangedCallback', { name, oldVal, newVal });
     }
 
     _onClose() {
         this.dispatchEvent(
-            new CustomEvent('close', { bubbles: true, detail: null })
+            new CustomEvent('close', {
+                bubbles: true,
+                cancelable: false,
+                composed: true, // important! without it events cannot get out of web component
+                // https://developer.mozilla.org/en-US/docs/Web/API/Event/composed
+                detail: {}
+            })
         );
     }
 }

@@ -18,7 +18,10 @@
     <body>
         <main>
             <h1>Web Components UI</h1>
-            <sunpietro-notification></sunpietro-notification>
+            <sunpietro-notification type="error">
+                <h3 slot="title">Coś nie wyszło!</h3>
+                <p>Wyłącz i włącznie ponownie. Powinno zadziałać.</p>
+            </sunpietro-notification>
             <h2>Resources</h2>
             <ul>
                 <li>
@@ -35,5 +38,26 @@
                 </li>
             </ul>
         </main>
+        <script>
+            (function() {
+                const notifications = document.querySelectorAll(
+                    'sunpietro-notification'
+                );
+
+                console.log({ notifications });
+
+                notifications.forEach(node => {
+                    node.addEventListener(
+                        'close',
+                        () => {
+                            console.log(`it's closed!`);
+
+                            node.setAttribute('type', 'info');
+                        },
+                        false
+                    );
+                });
+            })();
+        </script>
     </body>
 </html>
