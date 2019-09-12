@@ -2,35 +2,90 @@ const template = document.createElement('template');
 
 template.innerHTML = `
 <style>
+    *,
+    *:after,
+    *:before {
+        box-sizing: border-box;
+    }
+
     #container {
+        position: relative;
         padding: 8px 16px;
         border: 1px solid #ddd;
-        font-style: italic;
+        color: #231231;
+        display: grid;
+        grid-template-areas: 
+            'title btn'
+            'message btn';
+        grid-gap: 16px;
     }
 
-    #container[type="red"] {
-        background: red;
+    #title {
+        grid-area: title;
+    }
+    
+    #title-text {
+        margin-top: 0;
+    }
+
+    #message {
+        grid-area: message;
+    }
+
+    #btn {
+        grid-area: btn;
+        position: absolute;
+        top: 0;
+        right: -8px;
+        font-size: 24px;
+        background: none;
+        border: 0;
+        border-radius: 50%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 32px;
+        height: 32px;
+        width: 32px;
+        cursor: pointer;
+        transition: background .2s ease-in-out, color .2s ease-in-out;
+    }
+
+    #btn:hover,
+    #btn:focus {
+        background: #eee;
         color: #fff;
     }
 
-    #container[type="blue"] {
-        background: blue;
+    #container[type="error"] {
+        background: #dc3545;
         color: #fff;
     }
 
-    #container[type="green"] {
-        background: green;
+    #container[type="info"] {
+        background: #17a2b8;
+        color: #fff;
+    }
+
+    #container[type="success"] {
+        background: #28a745;
         color: #fff;
     }
 
     #container[type="default"] {
-        background: none;
+        background: #6c757d;
+        color: #fff;
+    }
+
+    #container[type="warning"] {
+        background: #ffc107;
     }
 </style>
 <section id="container">
-    <slot name="title"><h3>Notification title</h3></slot>
+    <div id="title"><slot name="title"><h3 id="title-text">Notification title</h3></slot></div>
     <div id="message"><slot>Sample message</slot></div>
-    <button type="button" id="close">&times;</button>
+    <button type="button" id="btn">&times;</button>
 </section>`;
 
 class Notification extends HTMLElement {
@@ -41,14 +96,16 @@ class Notification extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
-    static get observedAttributes() {
-        return ['type'];
+    get type() {
+        return this.getAttribute('type');
     }
 
-    _onClose() {
-        this.dispatchEvent(
-            new CustomEvent('close', { bubbles: true, detail: null })
-        );
+    set type(newValue) {
+        this.setAttribute('type', newValue);
+    }
+
+    static get observedAttributes() {
+        return ['type'];
     }
 
     connectedCallback() {
@@ -56,6 +113,12 @@ class Notification extends HTMLElement {
         this.container = this.shadowRoot.querySelector('#container');
 
         this.btnClose.addEventListener('click', this._onClose, false);
+
+        if (!this.hasAttribute('type')) {
+            this.setAttribute('type', 'default');
+        }
+
+        this.container.setAttribute('type', this.getAttribute('type'));
     }
 
     disconnectedCallback() {
@@ -64,6 +127,12 @@ class Notification extends HTMLElement {
 
     attributesChangedCallback(name, oldVal, newVal) {
         console.log({ oldVal, newVal, name });
+    }
+
+    _onClose() {
+        this.dispatchEvent(
+            new CustomEvent('close', { bubbles: true, detail: null })
+        );
     }
 }
 
