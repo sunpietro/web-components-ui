@@ -1,6 +1,7 @@
-const template = document.createElement('template');
+(function() {
+    const template = document.createElement('template');
 
-template.innerHTML = `
+    template.innerHTML = `
 <style>
     *,
     *:after,
@@ -88,68 +89,69 @@ template.innerHTML = `
     <button type="button" id="btn">&times;</button>
 </section>`;
 
-class Notification extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
+    class Notification extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
 
-        this.shadowRoot.appendChild(template.content.cloneNode(true));
-        this._onClose.bind(this);
-    }
-
-    get type() {
-        return this.getAttribute('type');
-    }
-
-    set type(newValue) {
-        console.log({ newValue });
-        this.setAttribute('type', newValue);
-    }
-
-    get hidden() {
-        return this.getAttribute('hidden');
-    }
-
-    set hidden(newValue) {
-        this.setAttribute('hidden', !!newVal);
-    }
-
-    static get observedAttributes() {
-        return ['type'];
-    }
-
-    connectedCallback() {
-        this.btnClose = this.shadowRoot.querySelector('#btn');
-        this.container = this.shadowRoot.querySelector('#container');
-
-        this.btnClose.addEventListener('click', this._onClose, false);
-
-        if (!this.hasAttribute('type')) {
-            this.setAttribute('type', 'default');
+            this.shadowRoot.appendChild(template.content.cloneNode(true));
+            this._onClose.bind(this);
         }
 
-        this.container.setAttribute('type', this.getAttribute('type'));
+        get type() {
+            return this.getAttribute('type');
+        }
+
+        set type(newValue) {
+            console.log({ newValue });
+            this.setAttribute('type', newValue);
+        }
+
+        get hidden() {
+            return this.getAttribute('hidden');
+        }
+
+        set hidden(newValue) {
+            this.setAttribute('hidden', !!newVal);
+        }
+
+        static get observedAttributes() {
+            return ['type'];
+        }
+
+        connectedCallback() {
+            this.btnClose = this.shadowRoot.querySelector('#btn');
+            this.container = this.shadowRoot.querySelector('#container');
+
+            this.btnClose.addEventListener('click', this._onClose, false);
+
+            if (!this.hasAttribute('type')) {
+                this.setAttribute('type', 'default');
+            }
+
+            this.container.setAttribute('type', this.getAttribute('type'));
+        }
+
+        disconnectedCallback() {
+            this.btnClose.removeEventListener('click', this._onClose);
+        }
+
+        attributesChangedCallback(name, oldVal, newVal) {
+            console.log('attributesChangedCallback', { name, oldVal, newVal });
+        }
+
+        _onClose() {
+            this.dispatchEvent(
+                new CustomEvent('close', {
+                    bubbles: true,
+                    cancelable: false,
+                    composed: true, // important! without it events cannot get out of web component
+                    // https://developer.mozilla.org/en-US/docs/Web/API/Event/composed
+                    detail: {}
+                })
+            );
+        }
     }
 
-    disconnectedCallback() {
-        this.btnClose.removeEventListener('click', this._onClose);
-    }
-
-    attributesChangedCallback(name, oldVal, newVal) {
-        console.log('attributesChangedCallback', { name, oldVal, newVal });
-    }
-
-    _onClose() {
-        this.dispatchEvent(
-            new CustomEvent('close', {
-                bubbles: true,
-                cancelable: false,
-                composed: true, // important! without it events cannot get out of web component
-                // https://developer.mozilla.org/en-US/docs/Web/API/Event/composed
-                detail: {}
-            })
-        );
-    }
-}
-
-window.customElements.define('sunpietro-notification', Notification);
+    window.customElements.define('sunpietro-notification', Notification);
+})();

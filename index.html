@@ -22,6 +22,7 @@
                 <h3 slot="title">Coś nie wyszło!</h3>
                 <p>Wyłącz i włącznie ponownie. Powinno zadziałać.</p>
             </sunpietro-notification>
+            <sunpietro-dropdown></sunpietro-dropdown>
             <h2>Resources</h2>
             <ul>
                 <li>
@@ -43,8 +44,9 @@
                 const notifications = document.querySelectorAll(
                     'sunpietro-notification'
                 );
-
-                console.log({ notifications });
+                const dropdowns = document.querySelectorAll(
+                    'sunpietro-dropdown'
+                );
 
                 notifications.forEach(node => {
                     node.addEventListener(
@@ -55,6 +57,18 @@
                             node.setAttribute('type', 'info');
                         },
                         false
+                    );
+                });
+
+                dropdowns.forEach(node => {
+                    node.setAttribute(
+                        'options',
+                        JSON.stringify({
+                            a: 'Option A',
+                            b: 'Option B',
+                            c: 'Option C',
+                            x: 'Option X'
+                        })
                     );
                 });
             })();
