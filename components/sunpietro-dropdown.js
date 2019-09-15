@@ -42,7 +42,8 @@
 }
 
 #list {
-    display: none;
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -55,11 +56,13 @@
     left: 0;
     right: 0;
     background: #fff;
+    transition: all .2s ease-in-out;
+    transform: scaleY(0);
+    transform-origin: top center;
 }
 
 .expanded #list {
-    display: flex;
-    flex-direction: column;
+    transform: scaleY(1);
 }
 
 .list-item {
