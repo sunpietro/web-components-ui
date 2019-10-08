@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Web Components UI - React</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+        <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script src="components/sunpietro-button.js" async defer></script>
+        <script src="components/sunpietro-checkbox.js" async defer></script>
+        <script src="components/sunpietro-dropdown.js" async defer></script>
+        <script src="components/sunpietro-notification.js" async defer></script>
+        <script src="components/sunpietro-toggle.js" async defer></script>
+        <script src="components/nowy-element.js" async defer></script>
+    </head>
+    <body>
+        <main>
+            <h1>Web Components UI</h1>
+            <div id="app"></div>
+        </main>
+
+        <script
+            src="https://unpkg.com/react@16/umd/react.development.js"
+            crossorigin
+        ></script>
+        <script
+            src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+            crossorigin
+        ></script>
+        <script>
+            (function() {
+                const notifications = document.querySelectorAll(
+                    'sunpietro-notification'
+                );
+                const dropdowns = document.querySelectorAll(
+                    'sunpietro-dropdown'
+                );
+
+                notifications.forEach(node => {
+                    node.addEventListener(
+                        'close',
+                        () => {
+                            console.log(`it's closed!`);
+
+                            node.setAttribute('type', 'info');
+                        },
+                        false
+                    );
+                });
+
+                dropdowns.forEach(node => {
+                    node.setAttribute(
+                        'options',
+                        JSON.stringify({
+                            a: 'Option A',
+                            b: 'Option B',
+                            c: 'Option C',
+                            x: 'Option X'
+                        })
+                    );
+                });
+            })();
+        </script>
+    </body>
+</html>
