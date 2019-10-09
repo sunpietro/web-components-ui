@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Web Components UI - React</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+        <script
+            src="https://unpkg.com/react@16/umd/react.development.js"
+            crossorigin
+        ></script>
+        <script
+            src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+            crossorigin
+        ></script>
+        <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script src="components/sunpietro-notification.js"></script>
+        <script src="react/App.js"></script>
+    </head>
+    <body>
+        <main>
+            <h1>Web Components UI - React</h1>
+            <div id="app"></div>
+        </main>
+        <script>
+            (function(window) {
+                const domContainer = document.querySelector('#app');
+
+                ReactDOM.render(React.createElement(window.App), domContainer);
+            })(window);
+        </script>
+    </body>
+</html>
