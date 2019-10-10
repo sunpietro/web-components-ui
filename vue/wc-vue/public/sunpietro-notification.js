@@ -103,7 +103,6 @@
         }
 
         set type(newValue) {
-            console.log({ newValue });
             this.setAttribute('type', newValue);
         }
 
@@ -112,7 +111,7 @@
         }
 
         set hidden(newValue) {
-            this.setAttribute('hidden', !!newVal);
+            this.setAttribute('hidden', !!newValue);
         }
 
         static get observedAttributes() {
@@ -145,8 +144,7 @@
                 new CustomEvent('close', {
                     bubbles: true,
                     cancelable: false,
-                    composed: true, // important! without it events cannot get out of web component
-                    // https://developer.mozilla.org/en-US/docs/Web/API/Event/composed
+                    composed: true,
                     detail: {}
                 })
             );

@@ -103,7 +103,6 @@
         }
 
         set type(newValue) {
-            console.log({ newValue });
             this.setAttribute('type', newValue);
         }
 
