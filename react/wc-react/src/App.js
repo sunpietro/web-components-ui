@@ -3,35 +3,69 @@ import './App.css';
 
 const App = () => {
     const [showNotification, setShowNotification] = React.useState(false);
-    const notification = React.useRef(null);
+    const [isError, setIsError] = React.useState(false);
+    const refNotification = React.useRef(null);
+    const title = isError ? 'Something went wrong!' : 'Everything is fine!';
+    const message = isError ? 'Please contact with support' : 'Relax :)';
+    const type = isError ? 'error' : 'success';
+    const hideNotification = () => setShowNotification(false);
+    const sampleCallback = () => console.log('sampleCallback');
+    const handleNotificationClick = () => {
+        console.log('click');
+
+        refNotification.current.dispatchEvent(
+            new CustomEvent('pass', { detail: { sampleCallback } })
+        );
+    };
 
     React.useEffect(() => {
-        if (!notification.current) {
+        const notificationRoot = refNotification.current;
+
+        if (!notificationRoot) {
             return;
         }
 
-        notification.current.addEventListener(
-            'close',
-            () => setShowNotification(false),
-            false
-        );
+        notificationRoot.addEventListener('close', hideNotification, false);
+
+        return () => {
+            notificationRoot.removeEventListener('close', hideNotification);
+        };
     });
 
     if (showNotification) {
         return (
-            <sunpietro-notification ref={notification}>
-                <h3 slot="title">
-                    Hello 4Developers from inside React component
-                </h3>
-                <p>It is great to be here!</p>
+            <sunpietro-notification
+                ref={refNotification}
+                type={type}
+                onClick={handleNotificationClick}
+            >
+                <h3 slot="title">{title}</h3>
+                <p>{message}</p>
             </sunpietro-notification>
         );
     }
 
     return (
-        <button type="button" onClick={() => setShowNotification(true)}>
-            Show
-        </button>
+        <div className="buttons">
+            <button
+                type="button"
+                onClick={() => {
+                    setIsError(false);
+                    setShowNotification(true);
+                }}
+            >
+                Show success
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    setIsError(true);
+                    setShowNotification(true);
+                }}
+            >
+                Show error
+            </button>
+        </div>
     );
 };
 

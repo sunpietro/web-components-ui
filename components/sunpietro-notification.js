@@ -110,7 +110,7 @@
             return this.getAttribute('hidden');
         }
 
-        set hidden(newValue) {
+        set hidden(newVal) {
             this.setAttribute('hidden', !!newVal);
         }
 

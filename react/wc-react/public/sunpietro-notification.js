@@ -93,9 +93,9 @@
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
+            this.container = null;
 
             this.shadowRoot.appendChild(template.content.cloneNode(true));
-            this._onClose.bind(this);
         }
 
         get type() {
@@ -111,7 +111,7 @@
         }
 
         set hidden(newValue) {
-            this.setAttribute('hidden', !!newVal);
+            this.setAttribute('hidden', !!newValue);
         }
 
         static get observedAttributes() {
@@ -123,23 +123,39 @@
             this.container = this.shadowRoot.querySelector('#container');
 
             this.btnClose.addEventListener('click', this._onClose, false);
+            this.addEventListener('pass', this._handlePass, false);
 
             if (!this.hasAttribute('type')) {
                 this.setAttribute('type', 'default');
             }
 
-            this.container.setAttribute('type', this.getAttribute('type'));
+            this._updateNotificationState();
         }
+
+        _handlePass = event => {
+            console.log('_handlePass', event);
+        };
+
+        _updateNotificationState = () => {
+            if (!this.container) {
+                return;
+            }
+
+            this.container.setAttribute('type', this.getAttribute('type'));
+        };
 
         disconnectedCallback() {
             this.btnClose.removeEventListener('click', this._onClose);
         }
 
-        attributesChangedCallback(name, oldVal, newVal) {
-            console.log('attributesChangedCallback', { name, oldVal, newVal });
+        attributeChangedCallback(name, oldVal, newVal) {
+            if (name === 'type' && oldVal !== newVal) {
+                this._updateNotificationState();
+                this.type = newVal;
+            }
         }
 
-        _onClose() {
+        _onClose = () => {
             this.dispatchEvent(
                 new CustomEvent('close', {
                     bubbles: true,
@@ -149,7 +165,7 @@
                     detail: {}
                 })
             );
-        }
+        };
     }
 
     window.customElements.define('sunpietro-notification', Notification);
